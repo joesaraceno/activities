@@ -50,14 +50,14 @@ namespace js.proto
             [DurableClient] IDurableOrchestrationClient client,
             ILogger log)
         {
-            log.LogCritical($"GOT Foo: {req.Query["foo"]}");
             var timer = new Stopwatch();
             timer.Start();
             string instanceId = await client.StartNewAsync("ExecuteMessageProcedural", null);
             HttpManagementPayload payload = client.CreateHttpManagementPayload(instanceId);
             timer.Stop();
             log.LogCritical($"Started orchestration with ID = '{instanceId}'. It took {timer.ElapsedMilliseconds}ms");
-            return new RedirectResult(payload.StatusQueryGetUri);
+            return new JsonResult(payload.StatusQueryGetUri);
+            // return new RedirectResult($"http://localhost:3000?statusUri={payload.StatusQueryGetUri}");
         }
     }
 }
